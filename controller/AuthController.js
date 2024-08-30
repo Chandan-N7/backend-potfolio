@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken")
 const User = require('../model/UserModel.js')
+const { compare } = require("bcryptjs");
+
 
 const maxAge = 1000 * 60 * 60 * 24 * 30;
-const createToken = (email, userId) => {
+const createJwt = (email, userId) => {
     return jwt.sign({ email, userId }, process.env.JWT_KEY,)
 }
 const signup = async (req, res, next) => {
@@ -17,12 +19,11 @@ const signup = async (req, res, next) => {
         }
         const user = await User.create({ email, password });
 
-        const token = createToken(email, user.id);
-        res.cookie("jwt", token, {
+        res.cookie("jwt", createJwt(email, user.id), {
             maxAge,
             secure: true,
-            samesite: "None"
-        })
+            sameSite: "None",
+        });
 
 
         return res.status(201).json({
@@ -50,13 +51,16 @@ const login = async (req, res, next) => {
         if (!user) {
             return res.status(404).send("invalid credentials")
         }
+        const auth = await compare(password, user.password);
+        if (!auth) {
+            return res.status(400).send("invalid credentials")
+        }
 
-        const token = createToken(email, user.id);
-        res.cookie("jwt", token, {
+        res.cookie("jwt", createJwt(email, user.id), {
             maxAge,
             secure: true,
-            samesite: "None"
-        })
+            sameSite: "None",
+        });
 
 
         return res.status(201).json({
