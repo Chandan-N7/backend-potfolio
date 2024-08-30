@@ -15,8 +15,8 @@ const upload =multer({
     storage:storage,
 })
 
-projectRoutes.post('/add-project',verifyToken, upload.single("image"), addProject)
+projectRoutes.post('/add-project', upload.single("image"), addProject)
 projectRoutes.get('/get-all-projects', getAllProjects)
-projectRoutes.post('/remove-project',verifyToken, removeProject)
+projectRoutes.post('/remove-project', removeProject)
 
 module.exports = projectRoutes;

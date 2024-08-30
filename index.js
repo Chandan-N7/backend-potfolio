@@ -15,17 +15,11 @@ const app = express()
 const port = process.env.PORT || 3000;
 const db = process.env.DB;
 
-app.use(cors());
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
-app.use(helmet({
-    helmet.crossOriginResourcePolicy: false,
-  }));
+app.use(cors({
+    origin:process.env.ORIGIN,
+    methods:["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials:true,
+}))
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
