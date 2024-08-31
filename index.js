@@ -16,7 +16,7 @@ const db = process.env.DB;
 
 app.use(
     cors({
-        origin: "*",
+        origin: process.env.ORIGIN,
         methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
         credentials: true,
     })
