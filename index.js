@@ -14,7 +14,13 @@ const app = express()
 const port = process.env.PORT || 3000;
 const db = process.env.DB;
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+        credentials: true,
+    })
+);
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
