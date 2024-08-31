@@ -14,15 +14,12 @@ const app = express()
 const port = process.env.PORT || 3000;
 const db = process.env.DB;
 
-// app.use(
-//     cors({
-//         origin: [process.env.ORIGIN],
-//         methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-//         allowedHeaders: ['Content-Type', 'Authorization'],
-//         credentials: true,
-//     })
-// );
-app.use(cors());
+const corsOptions = {
+  origin: 'https://chandancodes.onrender.com',  // Your frontend origin
+  credentials: true,  // Allows cookies and other credentials to be sent
+};
+
+app.use(cors(corsOptions));
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
